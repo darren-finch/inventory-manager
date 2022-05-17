@@ -21,7 +21,7 @@ public class InventoryManagerApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-form.fxml")));
-            Scene newScene = new Scene(root, 400, 375);
+            Scene newScene = new Scene(root);
 
             primaryStage.setTitle("Inventory Manager");
             primaryStage.setScene(newScene);
