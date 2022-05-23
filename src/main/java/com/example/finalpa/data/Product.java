@@ -1,4 +1,4 @@
-package com.example.finalpa;
+package com.example.finalpa.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

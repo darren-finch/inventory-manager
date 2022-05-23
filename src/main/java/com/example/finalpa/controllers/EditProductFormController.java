@@ -1,5 +1,6 @@
-package com.example.finalpa;
+package com.example.finalpa.controllers;
 
+import com.example.finalpa.data.Product;
 import javafx.event.ActionEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,4 +28,9 @@ public class EditProductFormController extends BaseController {
         getScreenNavigator().switchToMainForm();
     }
     public void saveProduct(ActionEvent e) {}
+
+    @Override
+    public void setupUI() {
+
+    }
 }

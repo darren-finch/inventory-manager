@@ -1,4 +1,4 @@
-package com.example.finalpa;
+package com.example.finalpa.data;
 
 public class InHouse extends Part {
     private int machineId;

@@ -1,17 +1,11 @@
 package com.example.finalpa;
 
+import com.example.finalpa.data.Inventory;
+import com.example.finalpa.di.BaseControllerConfig;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.Objects;
-
 public class InventoryManagementSystemApplication extends Application {
-
-    private ScreenNavigator screenNavigator;
 
     public static void main(String[] args) {
         launch(args);
@@ -19,7 +13,12 @@ public class InventoryManagementSystemApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        screenNavigator = new ScreenNavigator(primaryStage);
+        ScreenNavigator screenNavigator = new ScreenNavigator(primaryStage);
+        Inventory inventory = new Inventory();
+
+        BaseControllerConfig controllerConfig = new BaseControllerConfig(screenNavigator, inventory);
+        screenNavigator.setControllerConfig(controllerConfig);
+
         screenNavigator.switchToMainForm();
     }
 }

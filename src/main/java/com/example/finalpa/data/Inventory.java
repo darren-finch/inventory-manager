@@ -1,20 +1,28 @@
-package com.example.finalpa;
+package com.example.finalpa.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Inventory {
-    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<Part>());
+    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>());
     private final ObservableList<Product> allProducts = FXCollections.observableList(new LinkedList<>());
 
+    private int nextPartId = 0;
+    private int nextProductId = 0;
+
     public void addPart(Part newPart) {
+        newPart.setId(nextPartId++);
         allParts.add(newPart);
     }
 
     public void addProduct(Product newProduct) {
+        newProduct.setId(nextProductId++);
         allProducts.add(newProduct);
     }
 
@@ -25,12 +33,13 @@ public class Inventory {
                 .findFirst()
                 .orElse(null);
     }
-    public Part lookupPart(String partName) {
-        return allParts
-                .stream()
-                .filter(p -> Objects.equals(p.getName(), partName))
-                .findFirst()
-                .orElse(null);
+    public ObservableList<Part> lookupPart(String partName) {
+        return FXCollections.observableList(
+            allParts
+                    .stream()
+                    .filter(p -> p.getName().startsWith(partName))
+                    .toList()
+        );
     }
     public Product lookupProduct(int productId) {
         return allProducts
@@ -39,12 +48,13 @@ public class Inventory {
                 .findFirst()
                 .orElse(null);
     }
-    public Product lookupProduct(String productName) {
-        return allProducts
-                .stream()
-                .filter(p -> Objects.equals(p.getName(), productName))
-                .findFirst()
-                .orElse(null);
+    public ObservableList<Product> lookupProduct(String productName) {
+        return FXCollections.observableList(
+            allProducts
+                    .stream()
+                    .filter(p -> p.getName().startsWith(productName))
+                    .toList()
+        );
     }
     public void updatePart(int index, Part selectedPart) {
         allParts.set(index, selectedPart);

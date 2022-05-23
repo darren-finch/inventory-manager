@@ -1,5 +1,6 @@
-package com.example.finalpa;
+package com.example.finalpa.controllers;
 
+import com.example.finalpa.data.Part;
 import javafx.event.ActionEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,5 +17,10 @@ public class EditPartFormController extends BaseController {
 
     public void cancel(ActionEvent e) {
         getScreenNavigator().switchToMainForm();
+    }
+
+    @Override
+    public void setupUI() {
+
     }
 }
