@@ -1,11 +1,10 @@
-package com.example.finalpa.controllers;
+package com.example.inventorymanagementsystem.controllers;
 
-import com.example.finalpa.data.Product;
+import com.example.inventorymanagementsystem.data.Product;
 import javafx.event.ActionEvent;
-import org.jetbrains.annotations.Nullable;
 
 public class EditProductFormController extends BaseController {
-    private @Nullable Product product;
+    private Product product;
     public void setArgs(Product product) {
         this.product = product;
         System.out.println(product == null ? "No product, adding new one" : "Editing " + product.getName());

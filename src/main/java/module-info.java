@@ -1,12 +1,11 @@
-module com.example.finalpa {
+module com.example.inventorymanagementsystem {
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.jetbrains.annotations;
-    requires org.junit.jupiter.api;
-    requires org.junit.platform.commons;
+    requires junit;
 
-    exports com.example.finalpa.controllers;
-    opens com.example.finalpa.controllers to javafx.fxml;
-    exports com.example.finalpa.data;
-    opens com.example.finalpa.data to javafx.fxml;
+    opens com.example.inventorymanagementsystem.controllers to javafx.fxml;
+    exports com.example.inventorymanagementsystem.data;
+    opens com.example.inventorymanagementsystem.data to javafx.fxml;
+    exports com.example.inventorymanagementsystem to javafx.graphics;
+    exports com.example.inventorymanagementsystem.services to javafx.graphics;
 }

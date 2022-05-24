@@ -1,0 +1,31 @@
+package com.example.inventorymanagementsystem.services;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+public class DialogManager {
+    private boolean showingDialog = false;
+
+    public void showExitConfirmationDialog(Runnable onOk, Runnable onCancel) {
+        showConfirmationDialog("Are you sure you want to quit?", onOk, onCancel);
+    }
+    public void showDeleteConfirmationDialog(Runnable onOk, Runnable onCancel) {
+        showConfirmationDialog("Are you sure you want to delete?", onOk, onCancel);
+    }
+    private void showConfirmationDialog(String confirmationPrompt, Runnable onOk, Runnable onCancel) {
+        if (showingDialog) {
+            return;
+        }
+
+        Alert alertDialog = new Alert(Alert.AlertType.CONFIRMATION, confirmationPrompt);
+        showingDialog = true;
+        alertDialog.showAndWait().ifPresent(response -> {
+            if (response.equals(ButtonType.OK) && onOk != null) {
+                onOk.run();
+            } else if (response.equals(ButtonType.CANCEL) && onCancel != null) {
+                onCancel.run();
+            }
+            showingDialog = false;
+        });
+    }
+}

@@ -1,9 +1,7 @@
-package com.example.finalpa.controllers;
+package com.example.inventorymanagementsystem.controllers;
 
-import com.example.finalpa.data.InHouse;
-import com.example.finalpa.data.Inventory;
-import com.example.finalpa.data.Part;
-import com.example.finalpa.data.Product;
+import com.example.inventorymanagementsystem.data.Part;
+import com.example.inventorymanagementsystem.data.Product;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -83,24 +81,32 @@ public class MainFormController extends BaseController {
             int partId = Integer.parseInt(query);
             partsTableView.setItems(FXCollections.observableList(List.of(getInventory().lookupPart(partId))));
         } catch (NumberFormatException exception) {
+            System.out.println("QUERY: " + query);
             ObservableList<Part> parts = getInventory().lookupPart(query);
-            System.out.println(parts);
             partsTableView.setItems(parts);
         } catch (Exception exception) {
-            throw new RuntimeException(exception);
+            partsTableView.setItems(getInventory().getAllParts());
         }
     }
-    public void addPart(ActionEvent e) {
+    public void addPart() {
         getScreenNavigator().switchToEditPartForm(null);
     }
     public void modifyPart(ActionEvent e) {
-        getScreenNavigator().switchToEditPartForm(new InHouse(0, "Wheel", 10.99, 2, 1, 8, 199));
+        Part selectedPart = partsTableView.getSelectionModel().getSelectedItem();
+        if (selectedPart != null)
+            getScreenNavigator().switchToEditPartForm(selectedPart);
     }
     public void deletePart(ActionEvent e) {
-        System.out.println("deletePart");
+        getDialogManager().showDeleteConfirmationDialog(() -> {
+            Part selectedPart = partsTableView.getSelectionModel().getSelectedItem();
+            if (selectedPart != null)
+                getInventory().deletePart(selectedPart);
+            // Shouldn't be doing this manually
+            searchParts();
+        }, null);
     }
-    public void exit(ActionEvent e) {
-        Platform.exit();
+    public void exit() {
+        getDialogManager().showExitConfirmationDialog(Platform::exit, null);
     }
     public void searchProducts() {
         String query = searchProductsTextField.getText();
@@ -110,19 +116,26 @@ public class MainFormController extends BaseController {
             productsTableView.setItems(FXCollections.observableList(List.of(getInventory().lookupProduct(productId))));
         } catch (NumberFormatException exception) {
             ObservableList<Product> products = getInventory().lookupProduct(query);
-            System.out.println(products);
             productsTableView.setItems(products);
         } catch (Exception exception) {
-            throw new RuntimeException(exception);
+            productsTableView.setItems(getInventory().getAllProducts());
         }
     }
-    public void addProduct(ActionEvent e) {
+    public void addProduct() {
         getScreenNavigator().switchToEditProductForm(null);
     }
-    public void modifyProduct(ActionEvent e) {
-        getScreenNavigator().switchToEditProductForm(new Product(0, "Bike", 99.99, 5, 3, 10));
+    public void modifyProduct() {
+        Product selectedProduct = productsTableView.getSelectionModel().getSelectedItem();
+        if (selectedProduct != null)
+            getScreenNavigator().switchToEditProductForm(selectedProduct);
     }
-    public void deleteProduct(ActionEvent e) {
-        System.out.println("deleteProduct");
+    public void deleteProduct() {
+        getDialogManager().showDeleteConfirmationDialog(() -> {
+            Product selectedProduct = productsTableView.getSelectionModel().getSelectedItem();
+            if (selectedProduct != null)
+                getInventory().deleteProduct(selectedProduct);
+            // A manual refresh shouldn't be necessary
+            searchProducts();
+        }, null);
     }
 }

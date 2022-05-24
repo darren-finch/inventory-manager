@@ -1,12 +1,11 @@
-package com.example.finalpa;
+package com.example.inventorymanagementsystem;
 
-import com.example.finalpa.controllers.BaseController;
-import com.example.finalpa.controllers.EditPartFormController;
-import com.example.finalpa.controllers.EditProductFormController;
-import com.example.finalpa.controllers.MainFormController;
-import com.example.finalpa.data.Part;
-import com.example.finalpa.data.Product;
-import com.example.finalpa.di.BaseControllerConfig;
+import com.example.inventorymanagementsystem.controllers.BaseController;
+import com.example.inventorymanagementsystem.controllers.EditPartFormController;
+import com.example.inventorymanagementsystem.controllers.EditProductFormController;
+import com.example.inventorymanagementsystem.data.Part;
+import com.example.inventorymanagementsystem.data.Product;
+import com.example.inventorymanagementsystem.di.BaseControllerConfig;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

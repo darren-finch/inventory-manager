@@ -1,16 +1,13 @@
-package com.example.finalpa.data;
+package com.example.inventorymanagementsystem.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class Inventory {
-    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>());
+    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>(List.of(new InHouse(0, "Wheel", 99.9, 3, 1, 5, 199), new Outsourced(1, "Bike Frame", 159.90, 5, 5, 10, "RAZOR"))));
     private final ObservableList<Product> allProducts = FXCollections.observableList(new LinkedList<>());
 
     private int nextPartId = 0;
@@ -37,7 +34,7 @@ public class Inventory {
         return FXCollections.observableList(
             allParts
                     .stream()
-                    .filter(p -> p.getName().startsWith(partName))
+                    .filter(p -> p.getName().toLowerCase().contains(partName.toLowerCase()))
                     .toList()
         );
     }
@@ -52,7 +49,7 @@ public class Inventory {
         return FXCollections.observableList(
             allProducts
                     .stream()
-                    .filter(p -> p.getName().startsWith(productName))
+                    .filter(p -> p.getName().toLowerCase().contains(productName.toLowerCase()))
                     .toList()
         );
     }

@@ -1,8 +1,9 @@
-package com.example.finalpa.controllers;
+package com.example.inventorymanagementsystem.controllers;
 
-import com.example.finalpa.data.Inventory;
-import com.example.finalpa.di.BaseControllerConfig;
-import com.example.finalpa.ScreenNavigator;
+import com.example.inventorymanagementsystem.data.Inventory;
+import com.example.inventorymanagementsystem.di.BaseControllerConfig;
+import com.example.inventorymanagementsystem.services.DialogManager;
+import com.example.inventorymanagementsystem.ScreenNavigator;
 
 public abstract class BaseController {
     private BaseControllerConfig controllerConfig;
@@ -21,4 +22,6 @@ public abstract class BaseController {
         return controllerConfig.getScreenNavigator();
     }
     public Inventory getInventory() { return controllerConfig.getInventory(); }
+
+    public DialogManager getDialogManager() { return controllerConfig.getDialogManager(); }
 }

@@ -1,7 +1,8 @@
-package com.example.finalpa;
+package com.example.inventorymanagementsystem;
 
-import com.example.finalpa.data.Inventory;
-import com.example.finalpa.di.BaseControllerConfig;
+import com.example.inventorymanagementsystem.data.Inventory;
+import com.example.inventorymanagementsystem.di.BaseControllerConfig;
+import com.example.inventorymanagementsystem.services.DialogManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -15,8 +16,9 @@ public class InventoryManagementSystemApplication extends Application {
     public void start(Stage primaryStage) {
         ScreenNavigator screenNavigator = new ScreenNavigator(primaryStage);
         Inventory inventory = new Inventory();
+        DialogManager dialogManager = new DialogManager();
 
-        BaseControllerConfig controllerConfig = new BaseControllerConfig(screenNavigator, inventory);
+        BaseControllerConfig controllerConfig = new BaseControllerConfig(screenNavigator, inventory, dialogManager);
         screenNavigator.setControllerConfig(controllerConfig);
 
         screenNavigator.switchToMainForm();
