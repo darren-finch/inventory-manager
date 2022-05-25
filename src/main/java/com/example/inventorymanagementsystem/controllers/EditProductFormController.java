@@ -4,8 +4,12 @@ import com.example.inventorymanagementsystem.data.Product;
 import javafx.event.ActionEvent;
 
 public class EditProductFormController extends BaseController {
+    private int index;
+
     private Product product;
-    public void setArgs(Product product) {
+
+    public void setArgs(int index, Product product) {
+        this.index = index;
         this.product = product;
         System.out.println(product == null ? "No product, adding new one" : "Editing " + product.getName());
     }

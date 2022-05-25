@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="500.0" prefHeight="600.0" prefWidth="500.0" spacing="40.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.inventorymanagementsystem.controllers.EditPartFormController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="500.0" prefHeight="600.0" prefWidth="500.0" spacing="40.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.inventorymanagementsystem.controllers.EditPartFormController">
    <children>
       <HBox minWidth="400.0" spacing="20.0">
          <children>
             <Label styleClass="smallTitleLabel" text="Add Part" />
-            <RadioButton mnemonicParsing="false" text="In-House" />
-            <RadioButton layoutX="40.0" layoutY="10.0" mnemonicParsing="false" text="Outsourced" />
+            <RadioButton fx:id="inHouseRadioButton" mnemonicParsing="false" onAction="#onInHouseSelected" text="In-House" />
+            <RadioButton fx:id="outsourcedRadioButton" layoutX="40.0" layoutY="10.0" mnemonicParsing="false" onAction="#onOutsourcedSelected" text="Outsourced" />
          </children>
       </HBox>
       <GridPane hgap="10.0" minHeight="200.0" minWidth="400.0" vgap="10.0">
@@ -34,21 +41,33 @@
             <Label layoutX="10.0" layoutY="48.0" text="Inv" GridPane.rowIndex="2" />
             <Label layoutX="10.0" layoutY="78.0" text="Price/Cost" GridPane.rowIndex="3" />
             <Label layoutX="10.0" layoutY="108.0" text="Max" GridPane.rowIndex="4" />
-            <Label layoutX="10.0" layoutY="138.0" text="Machine ID" GridPane.rowIndex="5" />
-            <TextField fx:id="idTextField" GridPane.columnIndex="1" />
-            <TextField fx:id="nameTextField" layoutX="125.0" layoutY="14.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="invTextField" layoutX="125.0" layoutY="44.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="priceTextField" layoutX="125.0" layoutY="74.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="maxTextField" layoutX="125.0" layoutY="104.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField layoutX="125.0" layoutY="134.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="machineIdOrCompanyNameLabel" layoutX="10.0" layoutY="138.0" text="Machine ID" GridPane.rowIndex="5" />
+            <TextField fx:id="idTextField" onAction="#onIdTextFieldChanged" GridPane.columnIndex="1" />
+            <TextField fx:id="nameTextField" layoutX="125.0" layoutY="14.0" onAction="#onNameTextFieldChanged" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="invTextField" layoutX="125.0" layoutY="44.0" onAction="#onInvTextFieldChanged" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="priceTextField" layoutX="125.0" layoutY="74.0" onAction="#onPriceTextFieldChanged" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="maxTextField" layoutX="125.0" layoutY="104.0" onAction="#onMaxTextFieldChanged" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="machineIdOrCompanyNameTextField" layoutX="125.0" layoutY="134.0" onAction="#onMachineIdOrCompanyNameTextFieldChanged" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="138.0" text="Min" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-            <TextField fx:id="minTextField" layoutX="125.0" layoutY="134.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <TextField fx:id="minTextField" layoutX="125.0" layoutY="134.0" onAction="#onMinTextFieldChanged" GridPane.columnIndex="3" GridPane.rowIndex="4" />
          </children>
       </GridPane>
+      <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="NEVER">
+         <children>
+            <Label fx:id="idInvalidLabel" focusTraversable="false" text="ID must be a non-empty integer." textFill="RED" visible="false" />
+            <Label fx:id="nameInvalidLabel" focusTraversable="false" text="Name must be a non-empty string" textFill="RED" visible="false" />
+            <Label fx:id="invInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="25.0" text="Inv must be a non-empty integer between min and max (inclusive)" textFill="RED" visible="false" />
+            <Label fx:id="priceInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="40.0" text="Price must be a non-empty integer" textFill="RED" visible="false" />
+            <Label fx:id="minInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="55.0" text="Min must be a non-empty integer less than max." textFill="RED" visible="false" />
+            <Label fx:id="maxInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="70.0" text="Max must be a non-empty integer greater than min" textFill="RED" visible="false" />
+            <Label fx:id="machineIdInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="85.0" text="Machine ID must be a non-empty integer." textFill="RED" visible="false" />
+            <Label fx:id="companyNameInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="100.0" text="Company Name must be a non-empty string" textFill="RED" visible="false" />
+         </children>
+      </VBox>
       <HBox minWidth="400.0" nodeOrientation="RIGHT_TO_LEFT" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-            <Button mnemonicParsing="false" onAction="#saveChanges" text="Save" />
+            <Button mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+            <Button mnemonicParsing="false" onAction="#onSave" text="Save" />
          </children>
          <VBox.margin>
             <Insets />

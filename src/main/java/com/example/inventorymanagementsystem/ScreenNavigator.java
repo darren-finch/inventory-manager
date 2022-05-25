@@ -27,17 +27,20 @@ public class ScreenNavigator {
     }
 
     public void switchToMainForm() {
-        switchToScreen("main-form.fxml");
+        BaseController controller = switchToScreen("main-form.fxml");
+        controller.setupUI(); // this definitely needs to be refactored but for now it works
     }
 
-    public void switchToEditPartForm(Part part) {
+    public void switchToEditPartForm(int index, Part part) {
         EditPartFormController controller = (EditPartFormController) switchToScreen("edit-part-form.fxml");
-        controller.setArgs(part);
+        controller.setArgs(index, part);
+        controller.setupUI(); // this definitely needs to be refactored but for now it works
     }
 
-    public void switchToEditProductForm(Product product) {
+    public void switchToEditProductForm(int index, Product product) {
         EditProductFormController controller = (EditProductFormController) switchToScreen("edit-product-form.fxml");
-        controller.setArgs(product);
+        controller.setArgs(index, product);
+        controller.setupUI(); // this definitely needs to be refactored but for now it works
     }
 
     private BaseController switchToScreen(String screenResourceName) {
@@ -49,7 +52,6 @@ public class ScreenNavigator {
             controller = loader.getController();
             // This is a hack for dependency injection that is pretty dirty, but it will work for this project.
             controller.setupConfig(controllerConfig);
-            controller.setupUI();
 
             stage.setScene(new Scene(root));
             stage.show();

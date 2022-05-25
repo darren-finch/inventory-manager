@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -89,12 +90,14 @@ public class MainFormController extends BaseController {
         }
     }
     public void addPart() {
-        getScreenNavigator().switchToEditPartForm(null);
+        getScreenNavigator().switchToEditPartForm(-1,null);
     }
     public void modifyPart(ActionEvent e) {
-        Part selectedPart = partsTableView.getSelectionModel().getSelectedItem();
+        SelectionModel<Part> selectionModel = partsTableView.getSelectionModel();
+        Part selectedPart = selectionModel.getSelectedItem();
+        int selectedIndex = selectionModel.getSelectedIndex();
         if (selectedPart != null)
-            getScreenNavigator().switchToEditPartForm(selectedPart);
+            getScreenNavigator().switchToEditPartForm(selectedIndex, selectedPart);
     }
     public void deletePart(ActionEvent e) {
         getDialogManager().showDeleteConfirmationDialog(() -> {
@@ -122,12 +125,14 @@ public class MainFormController extends BaseController {
         }
     }
     public void addProduct() {
-        getScreenNavigator().switchToEditProductForm(null);
+        getScreenNavigator().switchToEditProductForm(-1,null);
     }
     public void modifyProduct() {
-        Product selectedProduct = productsTableView.getSelectionModel().getSelectedItem();
+        SelectionModel<Product> selectionModel = productsTableView.getSelectionModel();
+        Product selectedProduct = selectionModel.getSelectedItem();
+        int selectedIndex = selectionModel.getSelectedIndex();
         if (selectedProduct != null)
-            getScreenNavigator().switchToEditProductForm(selectedProduct);
+            getScreenNavigator().switchToEditProductForm(selectedIndex, selectedProduct);
     }
     public void deleteProduct() {
         getDialogManager().showDeleteConfirmationDialog(() -> {

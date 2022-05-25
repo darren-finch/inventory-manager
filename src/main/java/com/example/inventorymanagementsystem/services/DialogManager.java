@@ -12,6 +12,10 @@ public class DialogManager {
     public void showDeleteConfirmationDialog(Runnable onOk, Runnable onCancel) {
         showConfirmationDialog("Are you sure you want to delete?", onOk, onCancel);
     }
+    public void showCancelConfirmationDialog(Runnable onOk, Runnable onCancel) {
+        showConfirmationDialog("Are you sure you want to cancel?", onOk, onCancel);
+    }
+
     private void showConfirmationDialog(String confirmationPrompt, Runnable onOk, Runnable onCancel) {
         if (showingDialog) {
             return;
