@@ -7,12 +7,12 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
+import java.util.List;
+
 public class EditPartFormController extends BaseController {
     private int index;
 
     private PresentationPart presentationPart;
-
-    private boolean hasError = false;
 
     @FXML
     private RadioButton inHouseRadioButton;
@@ -39,10 +39,16 @@ public class EditPartFormController extends BaseController {
     private TextField maxTextField;
 
     @FXML
-    private TextField machineIdOrCompanyNameTextField;
+    private TextField machineIdTextField;
 
     @FXML
-    private Label machineIdOrCompanyNameLabel;
+    private TextField companyNameTextField;
+
+    @FXML
+    private Label machineIdLabel;
+
+    @FXML
+    private Label companyNameLabel;
 
     @FXML
     private Label idInvalidLabel;
@@ -67,16 +73,74 @@ public class EditPartFormController extends BaseController {
 
     @FXML
     private Label companyNameInvalidLabel;
+    private EditPartFormValidator validator;
 
     public void setArgs(int index, Part part) {
         this.index = index;
         this.presentationPart = new PresentationPart(part);
     }
 
+    // TODO: COMPLETE ADDING THE REST OF THE VALIDATABLE TEXT FIELDS
     @Override
     public void setupUI() {
         setupRadioButtons();
         setupTextFields();
+        validator = new EditPartFormValidator(List.of(
+                new ValidatableTextField(idTextField, (s) -> true, (s) -> {
+                    try {
+                        Integer.parseInt(s);
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }),
+                new ValidatableTextField(nameTextField, (s) -> true, (s) -> !s.isEmpty()),
+                new ValidatableTextField(invTextField, (s) -> true, (s) -> {
+                    try {
+                        int stock = Integer.parseInt(s);
+                        if (Integer.parseInt(presentationPart.getMin()) <= stock
+                                && Integer.parseInt(presentationPart.getMax()) >= stock) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }),
+                new ValidatableTextField(priceTextField, (s) -> true, (s) -> {
+                    try {
+                        Integer.parseInt(s);
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }),
+                new ValidatableTextField(idTextField, (s) -> true, (s) -> {
+                    try {
+                        Integer.parseInt(s);
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }),
+                new ValidatableTextField(idTextField, (s) -> true, (s) -> {
+                    try {
+                        Integer.parseInt(s);
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }),
+                new ValidatableTextField(idTextField, (s) -> true, (s) -> {
+                    try {
+                        Integer.parseInt(s);
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                })
+        ));
     }
 
     private void setupRadioButtons() {
@@ -92,157 +156,40 @@ public class EditPartFormController extends BaseController {
     }
 
     private void setupTextFields() {
-        idTextField.setText(Integer.toString(presentationPart.getId()));
+        idTextField.setText(presentationPart.getId());
         if (presentationPart.isExistingPart()) {
             idTextField.setDisable(true);
         }
 
         nameTextField.setText(presentationPart.getName());
-        invTextField.setText(Integer.toString(presentationPart.getStock()));
-        priceTextField.setText(Double.toString(presentationPart.getPrice()));
-        minTextField.setText(Integer.toString(presentationPart.getMin()));
-        maxTextField.setText(Integer.toString(presentationPart.getMax()));
+        invTextField.setText(presentationPart.getStock());
+        priceTextField.setText(presentationPart.getPrice());
+        minTextField.setText(presentationPart.getMin());
+        maxTextField.setText(presentationPart.getMax());
 
         if (partIsInHouse()) {
-            machineIdOrCompanyNameTextField.setText(Integer.toString(presentationPart.getMachineId()));
+            onInHouseSelected();
         } else {
-            machineIdOrCompanyNameTextField.setText(presentationPart.getCompanyName());
+            onOutsourcedSelected();
         }
     }
 
     public void onInHouseSelected() {
         presentationPart.setIsInHousePart(true);
-        machineIdOrCompanyNameTextField.setText(Integer.toString(presentationPart.getMachineId()));
-        machineIdOrCompanyNameLabel.setText("Machine ID");
+
     }
 
     public void onOutsourcedSelected() {
         presentationPart.setIsInHousePart(false);
-        machineIdOrCompanyNameTextField.setText(presentationPart.getCompanyName());
-        machineIdOrCompanyNameLabel.setText("Company Name");
+
     }
 
-    public void onIdTextFieldChanged() {
-        try {
-            presentationPart.setId(Integer.parseInt(idTextField.getText()));
-            idInvalidLabel.setManaged(false);
-            idInvalidLabel.setVisible(false);
-            hasError = true;
-        } catch (Exception e) {
-            idInvalidLabel.setManaged(true);
-            idInvalidLabel.setVisible(true);
-            hasError = false;
-        }
-    }
+    public void onTextFieldChanged() {
 
-    public void onNameTextFieldChanged() {
-        String name = nameTextField.getText();
-        if (name.isEmpty()) {
-            nameInvalidLabel.setManaged(true);
-            nameInvalidLabel.setVisible(true);
-            hasError = true;
-        } else {
-            nameInvalidLabel.setManaged(false);
-            nameInvalidLabel.setVisible(false);
-            hasError = false;
-        }
-        presentationPart.setName(name);
-    }
-
-    public void onInvTextFieldChanged() {
-        try {
-            int stock = Integer.parseInt(invTextField.getText());
-            presentationPart.setStock(stock);
-            if (presentationPart.getMin() > stock || presentationPart.getMax() < stock) {
-                throw new RuntimeException();
-            }
-            invInvalidLabel.setManaged(false);
-            invInvalidLabel.setVisible(false);
-            hasError = true;
-        } catch (Exception e) {
-            invInvalidLabel.setManaged(true);
-            invInvalidLabel.setVisible(true);
-            hasError = false;
-        }
-    }
-
-    public void onPriceTextFieldChanged() {
-        try {
-            presentationPart.setPrice(Double.parseDouble(priceTextField.getText()));
-            priceInvalidLabel.setManaged(false);
-            priceInvalidLabel.setVisible(false);
-            hasError = true;
-        } catch (Exception e) {
-            priceInvalidLabel.setManaged(true);
-            priceInvalidLabel.setVisible(true);
-            hasError = false;
-        }
-    }
-
-    public void onMinTextFieldChanged() {
-        try {
-            int min = Integer.parseInt(minTextField.getText());
-            presentationPart.setMin(min);
-            if (min > presentationPart.getStock() || min > presentationPart.getMax()) {
-                throw new RuntimeException();
-            }
-            minInvalidLabel.setManaged(false);
-            minInvalidLabel.setVisible(false);
-            hasError = true;
-        } catch (Exception e) {
-            minInvalidLabel.setManaged(true);
-            minInvalidLabel.setVisible(true);
-            hasError = false;
-        }
-    }
-
-    public void onMaxTextFieldChanged() {
-        try {
-            int max = Integer.parseInt(maxTextField.getText());
-            presentationPart.setMin(max);
-            if (max < presentationPart.getStock() || max < presentationPart.getMin()) {
-                throw new RuntimeException();
-            }
-            maxInvalidLabel.setManaged(false);
-            maxInvalidLabel.setVisible(false);
-            hasError = true;
-        } catch (Exception e) {
-            maxInvalidLabel.setManaged(true);
-            maxInvalidLabel.setVisible(true);
-            hasError = false;
-        }
-    }
-
-    public void onMachineIdOrCompanyNameTextFieldChanged() {
-        if (partIsInHouse()) {
-            try {
-                int machineId = Integer.parseInt(machineIdOrCompanyNameTextField.getText());
-                presentationPart.setMachineId(machineId);
-                machineIdInvalidLabel.setManaged(false);
-                machineIdInvalidLabel.setVisible(false);
-                hasError = true;
-            } catch (Exception e) {
-                machineIdInvalidLabel.setManaged(true);
-                machineIdInvalidLabel.setVisible(true);
-                hasError = false;
-            }
-        } else {
-            String companyName = machineIdOrCompanyNameTextField.getText();
-            if (companyName.isEmpty()) {
-                companyNameInvalidLabel.setManaged(true);
-                companyNameInvalidLabel.setVisible(true);
-                hasError = true;
-            } else {
-                companyNameInvalidLabel.setManaged(false);
-                companyNameInvalidLabel.setVisible(false);
-                hasError = false;
-            }
-            presentationPart.setName(companyName);
-        }
     }
 
     public void onSave() {
-        if (hasError) {
+        if (!validator.formIsValid()) {
             return;
         }
 
