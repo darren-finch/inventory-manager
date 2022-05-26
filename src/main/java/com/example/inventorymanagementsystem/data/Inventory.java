@@ -4,22 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class Inventory {
-    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>(List.of(new InHouse(0, "Wheel", 99.99, 3, 1, 5, 199), new Outsourced(1, "Bike Frame", 159.90, 5, 5, 10, "RAZOR"))));
+    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>());
     private final ObservableList<Product> allProducts = FXCollections.observableList(new LinkedList<>());
 
-    private int nextPartId = 0;
-    private int nextProductId = 0;
-
     public void addPart(Part newPart) {
-        newPart.setId(nextPartId++);
         allParts.add(newPart);
     }
 
     public void addProduct(Product newProduct) {
-        newProduct.setId(nextProductId++);
         allProducts.add(newProduct);
     }
 
@@ -56,7 +50,7 @@ public class Inventory {
     public void updatePart(int index, Part selectedPart) {
         allParts.set(index, selectedPart);
     }
-    public void updateProducts(int index, Product selectedProduct) {
+    public void updateProduct(int index, Product selectedProduct) {
         allProducts.set(index, selectedProduct);
     }
     public boolean deletePart(Part selectedPart) {

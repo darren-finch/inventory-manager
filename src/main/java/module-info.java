@@ -8,4 +8,5 @@ module com.example.inventorymanagementsystem {
     opens com.example.inventorymanagementsystem.data to javafx.fxml;
     exports com.example.inventorymanagementsystem to javafx.graphics;
     exports com.example.inventorymanagementsystem.services to javafx.graphics;
+    opens com.example.inventorymanagementsystem.controllers.validation to javafx.fxml;
 }

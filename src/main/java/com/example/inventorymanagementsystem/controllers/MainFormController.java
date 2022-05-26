@@ -82,7 +82,6 @@ public class MainFormController extends BaseController {
             int partId = Integer.parseInt(query);
             partsTableView.setItems(FXCollections.observableList(List.of(getInventory().lookupPart(partId))));
         } catch (NumberFormatException exception) {
-            System.out.println("QUERY: " + query);
             ObservableList<Part> parts = getInventory().lookupPart(query);
             partsTableView.setItems(parts);
         } catch (Exception exception) {
