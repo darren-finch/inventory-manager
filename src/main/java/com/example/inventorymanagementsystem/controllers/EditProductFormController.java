@@ -11,7 +11,6 @@ public class EditProductFormController extends BaseController {
     public void setArgs(int index, Product product) {
         this.index = index;
         this.product = product;
-        System.out.println(product == null ? "No product, adding new one" : "Editing " + product.getName());
     }
 
     public void searchParts(ActionEvent e) {}

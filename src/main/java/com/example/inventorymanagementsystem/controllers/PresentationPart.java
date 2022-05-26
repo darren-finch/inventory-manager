@@ -4,8 +4,9 @@ import com.example.inventorymanagementsystem.data.InHouse;
 import com.example.inventorymanagementsystem.data.Outsourced;
 import com.example.inventorymanagementsystem.data.Part;
 
+
 public class PresentationPart {
-    private String id = "0";
+    private String id = "";
     private String name = "";
     private String price = "0.0";
     private String stock = "0";
@@ -90,26 +91,18 @@ public class PresentationPart {
     }
 
     public String getMachineId() {
-        if (!isInHousePart)
-            throw new RuntimeException("Part is Outsourced, has no machineId!");
         return machineId;
     }
 
     public void setMachineId(String machineId) {
-        if (!isInHousePart)
-            throw new RuntimeException("Part is Outsourced, has no machineId!");
         this.machineId = machineId;
     }
 
     public String getCompanyName() {
-        if (isInHousePart)
-            throw new RuntimeException("Part is InHouse, has no companyName!");
         return companyName;
     }
 
     public void setCompanyName(String companyName) {
-        if (isInHousePart)
-            throw new RuntimeException("Part is InHouse, has no companyName!");
         this.companyName = companyName;
     }
 
@@ -123,6 +116,11 @@ public class PresentationPart {
 
     public Part toPart() {
         try {
+            if (id.isEmpty()) {
+                // We are adding a presentation part, set id to 0;
+                id = "0";
+            }
+
             if (isInHousePart) {
                 return new InHouse(Integer.parseInt(id), name, Double.parseDouble(price), Integer.parseInt(stock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(machineId));
             } else {
@@ -137,136 +135,3 @@ public class PresentationPart {
         return isExistingPart;
     }
 }
-
-
-//
-//public class PresentationPart {
-//    private final SimpleStringProperty id = new SimpleStringProperty("0");
-//    private final SimpleStringProperty name = new SimpleStringProperty("");
-//    private final SimpleStringProperty price = new SimpleStringProperty("0.0");
-//    private final SimpleStringProperty stock = new SimpleStringProperty("0");
-//    private final SimpleStringProperty min = new SimpleStringProperty("0");
-//    private final SimpleStringProperty max = new SimpleStringProperty("0");
-//
-//    private final SimpleStringProperty machineId = new SimpleStringProperty("0");
-//
-//    private final SimpleStringProperty companyName = new SimpleStringProperty();
-//
-//    private boolean isInHousePart = true;
-//
-//    private boolean isExistingPart = false;
-//
-//    public PresentationPart(Part part) {
-//        if (part == null) {
-//            return;
-//        }
-//
-//        isExistingPart = true;
-//        this.id.set(part.getId());
-//        this.name.set(part.getName());
-//        this.stock.set(part.getStock());
-//        this.price.set(part.getPrice());
-//        this.min.set(part.getMin());
-//        this.max.set(part.getMax());
-//
-//        if (part instanceof InHouse) {
-//            this.machineId.set(((InHouse) part).getMachineId());
-//        } else {
-//            this.companyName.set(((Outsourced) part).getCompanyName());
-//            isInHousePart = false;
-//        }
-//    }
-//
-//    public int getId() {
-//        return id.get();
-//    }
-//
-//    public void setId(int id) {
-//        this.id.set(id);
-//    }
-//
-//    public String getName() {
-//        return name.get();
-//    }
-//
-//    public void setName(String name) {
-//        this.name.set(name);
-//    }
-//
-//    public double getPrice() {
-//        return price.get();
-//    }
-//
-//    public void setPrice(double price) {
-//        this.price.set(price);
-//    }
-//
-//    public int getStock() {
-//        return stock.get();
-//    }
-//
-//    public void setStock(int stock) {
-//        this.stock.set(stock);
-//    }
-//
-//    public int getMin() {
-//        return min.get();
-//    }
-//
-//    public void setMin(int min) {
-//        this.min.set(min);
-//    }
-//
-//    public int getMax() {
-//        return max.get();
-//    }
-//
-//    public void setMax(int max) {
-//        this.max.set(max);
-//    }
-//
-//    public int getMachineId() {
-//        if (!isInHousePart)
-//            throw new RuntimeException("Part is Outsourced, has no machineId!");
-//        return machineId.get();
-//    }
-//
-//    public void setMachineId(int machineId) {
-//        if (!isInHousePart)
-//            throw new RuntimeException("Part is Outsourced, has no machineId!");
-//        this.machineId.set(machineId);
-//    }
-//
-//    public String getCompanyName() {
-//        if (isInHousePart)
-//            throw new RuntimeException("Part is InHouse, has no companyName!");
-//        return companyName.get();
-//    }
-//
-//    public void setCompanyName(String companyName) {
-//        if (isInHousePart)
-//            throw new RuntimeException("Part is InHouse, has no companyName!");
-//        this.companyName.set(companyName);
-//    }
-//
-//    public boolean getIsInHousePart() {
-//        return isInHousePart;
-//    }
-//
-//    public void setIsInHousePart(boolean isInHousePart) {
-//        this.isInHousePart = isInHousePart;
-//    }
-//
-//    public Part toPart() {
-//        // TODO: Turn into a try/catch block where you convert all data into the proper data types from Strings
-//        if (isInHousePart) {
-//            return new InHouse(getId(), getName(), getPrice(), getStock(), getMin(), getMax(), getMachineId());
-//        } else {
-//            return new Outsourced(getId(), getName(), getPrice(), getStock(), getMin(), getMax(), getCompanyName());
-//        }
-//    }
-//
-//    public boolean isExistingPart() {
-//        return isExistingPart;
-//    }
-//}
