@@ -4,22 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class Inventory {
     private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>());
     private final ObservableList<Product> allProducts = FXCollections.observableList(new LinkedList<>());
 
-    private int nextPartId = 0;
-    private int nextProductId = 0;
-
     public void addPart(Part newPart) {
-        newPart.setId(nextPartId++);
         allParts.add(newPart);
     }
 
     public void addProduct(Product newProduct) {
-        newProduct.setId(nextProductId++);
         allProducts.add(newProduct);
     }
 
