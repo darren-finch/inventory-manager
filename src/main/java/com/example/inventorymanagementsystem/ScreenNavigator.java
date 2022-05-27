@@ -18,6 +18,8 @@ public class ScreenNavigator {
 
     private BaseControllerConfig controllerConfig;
 
+    private BaseController currentController;
+
     public ScreenNavigator(Stage stage) {
         this.stage = stage;
     }
@@ -44,20 +46,24 @@ public class ScreenNavigator {
     }
 
     private BaseController switchToScreen(String screenResourceName) {
-        BaseController controller;
+        if (currentController != null) {
+            currentController.tearDown();
+        }
+
+        BaseController newController;
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(screenResourceName)));
             Parent root = loader.load();
 
-            controller = loader.getController();
+            newController = loader.getController();
             // This is a hack for dependency injection that is pretty dirty, but it will work for this project.
-            controller.setupConfig(controllerConfig);
+            newController.setupConfig(controllerConfig);
 
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return controller;
+        return newController;
     }
 }

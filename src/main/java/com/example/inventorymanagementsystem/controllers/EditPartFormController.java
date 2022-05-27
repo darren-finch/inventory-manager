@@ -79,7 +79,6 @@ public class EditPartFormController extends BaseController {
     @FXML
     private Label companyNameInvalidLabel;
 
-    private TextFieldValidator idValidator;
     private TextFieldValidator nameValidator;
     private TextFieldValidator invValidator;
     private TextFieldValidator priceValidator;
@@ -103,8 +102,12 @@ public class EditPartFormController extends BaseController {
         revalidateForm();
     }
 
+    @Override
+    public void tearDown() {
+
+    }
+
     private void setupValidation() {
-        idValidator = new TextFieldValidator(idTextField, AcceptableInputUtil::isAcceptableInt, (s) -> true, (s) -> presentationPart.setId(s));
         nameValidator = new TextFieldValidator(nameTextField, (s) -> true, (s) -> !s.isBlank(), (s) -> presentationPart.setName(s));
         invValidator = new TextFieldValidator(invTextField, AcceptableInputUtil::isAcceptableInt, (s) -> {
                     try {
@@ -144,7 +147,6 @@ public class EditPartFormController extends BaseController {
         machineIdValidator = new TextFieldValidator(machineIdTextField, AcceptableInputUtil::isAcceptableInt, (s) -> true, (s) -> presentationPart.setMachineId(s));
         companyNameValidator = new TextFieldValidator(companyNameTextField, (s) -> true, (s) -> !s.isBlank(), (s) -> presentationPart.setCompanyName(s));
 
-        idValidator.setErrorLabel(idInvalidLabel, "ID must be a non-empty integer");
         nameValidator.setErrorLabel(nameInvalidLabel, "Name must be non-empty");
         invValidator.setErrorLabel(invInvalidLabel, "Inv must be a non-empty integer greater than/equal to min and less than/equal to max");
         priceValidator.setErrorLabel(priceInvalidLabel, "Price must be a non-empty integer");
@@ -153,7 +155,7 @@ public class EditPartFormController extends BaseController {
         machineIdValidator.setErrorLabel(machineIdInvalidLabel, "Machine ID must be a non-empty integer");
         companyNameValidator.setErrorLabel(companyNameInvalidLabel, "Company Name must be non-empty");
 
-        formValidator = new FormValidator(List.of(idValidator, nameValidator, invValidator, priceValidator, minValidator, maxValidator, machineIdValidator, companyNameValidator));
+        formValidator = new FormValidator(List.of(nameValidator, invValidator, priceValidator, minValidator, maxValidator, machineIdValidator, companyNameValidator));
     }
 
     private void setupRadioButtons() {

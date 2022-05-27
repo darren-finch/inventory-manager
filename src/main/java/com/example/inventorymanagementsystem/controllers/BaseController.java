@@ -18,6 +18,8 @@ public abstract class BaseController {
 
     public abstract void setupUI();
 
+    public abstract void tearDown();
+
     public ScreenNavigator getScreenNavigator() {
         return controllerConfig.getScreenNavigator();
     }

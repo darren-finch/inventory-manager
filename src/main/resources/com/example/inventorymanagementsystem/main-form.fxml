@@ -31,16 +31,22 @@
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" percentHeight="70.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Parts" />
             <TextField fx:id="searchPartsTextField" onAction="#searchParts" promptText="Search by Part ID or Name" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
                <children>
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add" HBox.hgrow="ALWAYS" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#modifyPart" text="Modify" HBox.hgrow="ALWAYS" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deletePart" text="Delete" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
+               <children>
+                  <Label fx:id="searchPartsByIdErrorLabel" alignment="TOP_LEFT" text="Cannot find part by that id." textFill="RED" visible="false" />
                </children>
             </HBox>
             <TableView fx:id="partsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" />
@@ -56,15 +62,21 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" percentHeight="70.0" prefHeight="30.0" vgrow="ALWAYS" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Label text="Products" />
             <TextField fx:id="searchProductsTextField" onAction="#searchProducts" promptText="Search by Product ID or Name" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
                <children>
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProduct" text="Add" HBox.hgrow="ALWAYS" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#modifyProduct" text="Modify" HBox.hgrow="ALWAYS" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteProduct" text="Delete" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
+               <children>
+                  <Label fx:id="searchProductsByIdErrorLabel" alignment="TOP_LEFT" text="Cannot find product by that id." textFill="RED" visible="false" />
                </children>
             </HBox>
             <TableView fx:id="productsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" />

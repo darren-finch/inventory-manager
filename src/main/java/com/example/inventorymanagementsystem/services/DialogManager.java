@@ -24,11 +24,23 @@ public class DialogManager {
         Alert alertDialog = new Alert(Alert.AlertType.CONFIRMATION, confirmationPrompt);
         showingDialog = true;
         alertDialog.showAndWait().ifPresent(response -> {
+            // This needs to be set to false before we run any responses to allow for dialog chaining
+            showingDialog = false;
             if (response.equals(ButtonType.OK) && onOk != null) {
                 onOk.run();
             } else if (response.equals(ButtonType.CANCEL) && onCancel != null) {
                 onCancel.run();
             }
+        });
+    }
+
+    public void showAlertDialog(String alertText) {
+        if (showingDialog)
+            return;
+
+        Alert alertDialog = new Alert(Alert.AlertType.INFORMATION, alertText);
+        showingDialog = true;
+        alertDialog.showAndWait().ifPresent(response -> {
             showingDialog = false;
         });
     }

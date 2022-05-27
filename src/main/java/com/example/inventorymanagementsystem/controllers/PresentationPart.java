@@ -6,7 +6,7 @@ import com.example.inventorymanagementsystem.data.Part;
 
 
 public class PresentationPart {
-    private String id = "";
+    private String id = "0";
     private String name = "";
     private String price = "0.0";
     private String stock = "0";
@@ -116,18 +116,13 @@ public class PresentationPart {
 
     public Part toPart() {
         try {
-            if (id.isEmpty()) {
-                // We are adding a presentation part, set id to 0;
-                id = "0";
-            }
-
             if (isInHousePart) {
                 return new InHouse(Integer.parseInt(id), name, Double.parseDouble(price), Integer.parseInt(stock), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(machineId));
             } else {
                 return new Outsourced(Integer.parseInt(id), name, Double.parseDouble(price), Integer.parseInt(stock), Integer.parseInt(min), Integer.parseInt(max), companyName);
             }
         } catch (Exception e) {
-            throw new RuntimeException("A field has invalid data.");
+            throw new RuntimeException("A PresentationPart field has invalid data.");
         }
     }
 

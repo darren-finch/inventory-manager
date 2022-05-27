@@ -56,7 +56,6 @@
       </GridPane>
       <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="NEVER">
          <children>
-            <Label fx:id="idInvalidLabel" focusTraversable="false" text="ID must be a non-empty integer." textFill="RED" visible="false" />
             <Label fx:id="nameInvalidLabel" focusTraversable="false" text="Name must be a non-empty string" textFill="RED" visible="false" />
             <Label fx:id="invInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="25.0" text="Inv must be a non-empty integer between min and max (inclusive)" textFill="RED" visible="false" />
             <Label fx:id="priceInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="40.0" text="Price must be a non-empty integer" textFill="RED" visible="false" />
