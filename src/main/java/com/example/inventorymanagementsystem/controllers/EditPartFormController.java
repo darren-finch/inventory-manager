@@ -71,9 +71,6 @@ public class EditPartFormController extends BaseController {
     private Label minInvalidLabel;
 
     @FXML
-    private Label maxInvalidLabel;
-
-    @FXML
     private Label machineIdInvalidLabel;
 
     @FXML
@@ -129,29 +126,19 @@ public class EditPartFormController extends BaseController {
         minValidator = new TextFieldValidator(minTextField, AcceptableInputUtil::isAcceptableInt, (s) -> {
                     try {
                         int min = Integer.parseInt(s);
-                        return min <= Integer.parseInt(presentationPart.getStock())
-                                && min <= Integer.parseInt(presentationPart.getMax());
+                        return min <= Integer.parseInt(presentationPart.getMax());
                     } catch (Exception e) {
                         return false;
                     }
                 }, (s) -> presentationPart.setMin(s));
-        maxValidator = new TextFieldValidator(maxTextField, AcceptableInputUtil::isAcceptableInt, (s) -> {
-                    try {
-                        int max = Integer.parseInt(s);
-                        return Integer.parseInt(presentationPart.getStock()) <= max
-                                && Integer.parseInt(presentationPart.getMin()) <= max;
-                    } catch (Exception e) {
-                        return false;
-                    }
-                }, (s) -> presentationPart.setMax(s));
+        maxValidator = new TextFieldValidator(maxTextField, AcceptableInputUtil::isAcceptableInt, (s) -> true, (s) -> presentationPart.setMax(s));
         machineIdValidator = new TextFieldValidator(machineIdTextField, AcceptableInputUtil::isAcceptableInt, (s) -> true, (s) -> presentationPart.setMachineId(s));
         companyNameValidator = new TextFieldValidator(companyNameTextField, (s) -> true, (s) -> !s.isBlank(), (s) -> presentationPart.setCompanyName(s));
 
         nameValidator.setErrorLabel(nameInvalidLabel, "Name must be non-empty");
-        invValidator.setErrorLabel(invInvalidLabel, "Inv must be a non-empty integer greater than/equal to min and less than/equal to max");
         priceValidator.setErrorLabel(priceInvalidLabel, "Price must be a non-empty integer");
-        minValidator.setErrorLabel(minInvalidLabel, "Min must be a non-empty integer less than/equal to stock and max");
-        maxValidator.setErrorLabel(maxInvalidLabel, "Max must be a non-empty integer greater than/equal to stock and min");
+        invValidator.setErrorLabel(invInvalidLabel, "Inv must be a valid integer between min and max (inclusive)");
+        minValidator.setErrorLabel(minInvalidLabel, "Min must be a valid integer less than or equal to max");
         machineIdValidator.setErrorLabel(machineIdInvalidLabel, "Machine ID must be a non-empty integer");
         companyNameValidator.setErrorLabel(companyNameInvalidLabel, "Company Name must be non-empty");
 

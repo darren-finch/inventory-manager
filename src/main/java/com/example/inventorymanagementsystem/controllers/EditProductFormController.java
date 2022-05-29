@@ -69,9 +69,6 @@ public class EditProductFormController extends BaseController {
     @FXML
     private Label minInvalidLabel;
 
-    @FXML
-    private Label maxInvalidLabel;
-
     public void setArgs(int index, Product product) {
         this.index = index;
         this.presentationProduct = new PresentationProduct(product);
@@ -122,27 +119,17 @@ public class EditProductFormController extends BaseController {
         minValidator = new TextFieldValidator(minTextField, AcceptableInputUtil::isAcceptableInt, (s) -> {
             try {
                 int min = Integer.parseInt(s);
-                return min <= Integer.parseInt(presentationProduct.getStock())
-                        && min <= Integer.parseInt(presentationProduct.getMax());
+                return min <= Integer.parseInt(presentationProduct.getMax());
             } catch (Exception e) {
                 return false;
             }
         }, (s) -> presentationProduct.setMin(s));
-        maxValidator = new TextFieldValidator(maxTextField, AcceptableInputUtil::isAcceptableInt, (s) -> {
-            try {
-                int max = Integer.parseInt(s);
-                return Integer.parseInt(presentationProduct.getStock()) <= max
-                        && Integer.parseInt(presentationProduct.getMin()) <= max;
-            } catch (Exception e) {
-                return false;
-            }
-        }, (s) -> presentationProduct.setMax(s));
+        maxValidator = new TextFieldValidator(maxTextField, AcceptableInputUtil::isAcceptableInt, (s) -> true, (s) -> presentationProduct.setMax(s));
 
         nameValidator.setErrorLabel(nameInvalidLabel, "Name must be non-empty");
-        invValidator.setErrorLabel(invInvalidLabel, "Inv must be a non-empty integer greater than/equal to min and less than/equal to max");
         priceValidator.setErrorLabel(priceInvalidLabel, "Price must be a non-empty integer");
-        minValidator.setErrorLabel(minInvalidLabel, "Min must be a non-empty integer less than/equal to stock and max");
-        maxValidator.setErrorLabel(maxInvalidLabel, "Max must be a non-empty integer greater than/equal to stock and min");
+        invValidator.setErrorLabel(invInvalidLabel, "Inv must be a valid integer between min and max (inclusive)");
+        minValidator.setErrorLabel(minInvalidLabel, "Min must be a valid integer less than or equal to max");
 
         validator = new FormValidator(List.of(nameValidator, invValidator, priceValidator, minValidator, maxValidator));
         validator.revalidateForm();
@@ -201,23 +188,26 @@ public class EditProductFormController extends BaseController {
 
     public void searchParts() {
         String query = searchPartsTextField.getText();
-        searchPartsErrorLabel.setVisible(false); // error hidden by default
-
+        boolean hasError = false;
+        searchPartsErrorLabel.setVisible(false);
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int partId = Integer.parseInt(query);
             Part queryByIdResult = getInventory().lookupPart(partId);
-            if (queryByIdResult != null) {
+            if (queryByIdResult == null)
+                hasError = true;
+            else
                 allPartsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
-            } else {
-                throw new RuntimeException();
-            }
         } catch (NumberFormatException exception) {
             ObservableList<Part> parts = getInventory().lookupPart(query);
-            allPartsTableView.setItems(parts);
-        } catch (Exception exception) {
-            allPartsTableView.setItems(getInventory().getAllParts());
-            searchPartsErrorLabel.setVisible(true);
+            if (parts.isEmpty())
+                hasError = true;
+            else
+                allPartsTableView.setItems(parts);
+        } finally {
+            if (hasError)
+                allPartsTableView.setItems(getInventory().getAllParts());
+            searchPartsErrorLabel.setVisible(hasError);
         }
     }
     public void addAssociatedPart() {

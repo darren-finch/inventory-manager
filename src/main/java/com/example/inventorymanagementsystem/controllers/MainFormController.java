@@ -95,24 +95,26 @@ public class MainFormController extends BaseController {
 
     private void refreshParts() {
         String query = searchPartsTextField.getText();
+        boolean hasError = false;
         searchPartsErrorLabel.setVisible(false);
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int partId = Integer.parseInt(query);
             Part queryByIdResult = getInventory().lookupPart(partId);
             if (queryByIdResult == null)
-                throw new RuntimeException();
-
-            partsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
+                hasError = true;
+            else
+                partsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
         } catch (NumberFormatException exception) {
             ObservableList<Part> parts = getInventory().lookupPart(query);
             if (parts.isEmpty())
-                throw new RuntimeException();
-
-            partsTableView.setItems(parts);
-        } catch (Exception exception) {
-            partsTableView.setItems(getInventory().getAllParts());
-            searchPartsErrorLabel.setVisible(true);
+                hasError = true;
+            else
+                partsTableView.setItems(parts);
+        } finally {
+            if (hasError)
+                partsTableView.setItems(getInventory().getAllParts());
+            searchPartsErrorLabel.setVisible(hasError);
         }
     }
 
@@ -143,24 +145,26 @@ public class MainFormController extends BaseController {
 
     private void refreshProducts() {
         String query = searchProductsTextField.getText();
+        boolean hasError = false;
         searchProductsErrorLabel.setVisible(false);
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int productId = Integer.parseInt(query);
             Product queryByIdResult = getInventory().lookupProduct(productId);
             if (queryByIdResult == null)
-                throw new RuntimeException();
-
-            productsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
+                hasError = true;
+            else
+                productsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
         } catch (NumberFormatException exception) {
             ObservableList<Product> products = getInventory().lookupProduct(query);
             if (products.isEmpty())
-                throw new RuntimeException();
-
-            productsTableView.setItems(products);
-        } catch (Exception exception) {
-            productsTableView.setItems(getInventory().getAllProducts());
-            searchProductsErrorLabel.setVisible(true);
+                hasError = true;
+            else
+                productsTableView.setItems(products);
+        } finally {
+            if (hasError)
+                productsTableView.setItems(getInventory().getAllProducts());
+            searchProductsErrorLabel.setVisible(hasError);
         }
     }
 

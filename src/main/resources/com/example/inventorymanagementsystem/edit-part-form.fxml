@@ -53,7 +53,6 @@
             <Label fx:id="invInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="25.0" text="Inv must be a non-empty integer between min and max (inclusive)" textFill="RED" visible="false" />
             <Label fx:id="priceInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="40.0" text="Price must be a non-empty integer" textFill="RED" visible="false" />
             <Label fx:id="minInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="55.0" text="Min must be a non-empty integer less than max." textFill="RED" visible="false" />
-            <Label fx:id="maxInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="70.0" text="Max must be a non-empty integer greater than min" textFill="RED" visible="false" />
             <Label fx:id="machineIdInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="85.0" text="Machine ID must be a non-empty integer." textFill="RED" visible="false" />
             <Label fx:id="companyNameInvalidLabel" focusTraversable="false" layoutX="10.0" layoutY="100.0" text="Company Name must be a non-empty string" textFill="RED" visible="false" />
          </children>
