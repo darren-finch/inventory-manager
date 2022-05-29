@@ -89,7 +89,9 @@ public class EditProductFormController extends BaseController {
 
     private void setupTextFields() {
         idTextField.setDisable(true);
-        idTextField.setText(presentationProduct.getId());
+        if (presentationProduct.isExistingProduct())
+            idTextField.setText(presentationProduct.getId());
+
         nameTextField.setText(presentationProduct.getName());
         invTextField.setText(presentationProduct.getStock());
         priceTextField.setText(presentationProduct.getPrice());
@@ -189,7 +191,10 @@ public class EditProductFormController extends BaseController {
     public void searchParts() {
         String query = searchPartsTextField.getText();
         boolean hasError = false;
+        ObservableList<Part> results = FXCollections.emptyObservableList();
+
         searchPartsErrorLabel.setVisible(false);
+
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int partId = Integer.parseInt(query);
@@ -197,17 +202,17 @@ public class EditProductFormController extends BaseController {
             if (queryByIdResult == null)
                 hasError = true;
             else
-                allPartsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
+                results = FXCollections.observableList(List.of(queryByIdResult));
         } catch (NumberFormatException exception) {
-            ObservableList<Part> parts = getInventory().lookupPart(query);
-            if (parts.isEmpty())
+            results = getInventory().lookupPart(query);
+            if (results.isEmpty() && !query.isBlank())
                 hasError = true;
-            else
-                allPartsTableView.setItems(parts);
         } finally {
-            if (hasError)
-                allPartsTableView.setItems(getInventory().getAllParts());
-            searchPartsErrorLabel.setVisible(hasError);
+            if (hasError) {
+                results = getInventory().getAllParts();
+                searchPartsErrorLabel.setVisible(true);
+            }
+            allPartsTableView.setItems(results);
         }
     }
     public void addAssociatedPart() {

@@ -1,7 +1,7 @@
 package com.example.inventorymanagementsystem.di;
 
 import com.example.inventorymanagementsystem.data.Inventory;
-import com.example.inventorymanagementsystem.services.DialogManager;
+import com.example.inventorymanagementsystem.DialogManager;
 import com.example.inventorymanagementsystem.ScreenNavigator;
 
 public class BaseControllerConfig {

@@ -161,7 +161,9 @@ public class EditPartFormController extends BaseController {
 
     private void setupTextFields() {
         idTextField.setDisable(true);
-        idTextField.setText(presentationPart.getId());
+        if (presentationPart.isExistingPart())
+            idTextField.setText(presentationPart.getId());
+
         nameTextField.setText(presentationPart.getName());
         invTextField.setText(presentationPart.getStock());
         priceTextField.setText(presentationPart.getPrice());

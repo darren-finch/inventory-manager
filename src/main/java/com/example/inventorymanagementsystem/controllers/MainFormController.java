@@ -96,7 +96,10 @@ public class MainFormController extends BaseController {
     private void refreshParts() {
         String query = searchPartsTextField.getText();
         boolean hasError = false;
+        ObservableList<Part> results = FXCollections.emptyObservableList();
+
         searchPartsErrorLabel.setVisible(false);
+
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int partId = Integer.parseInt(query);
@@ -104,17 +107,17 @@ public class MainFormController extends BaseController {
             if (queryByIdResult == null)
                 hasError = true;
             else
-                partsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
+                results = FXCollections.observableList(List.of(queryByIdResult));
         } catch (NumberFormatException exception) {
-            ObservableList<Part> parts = getInventory().lookupPart(query);
-            if (parts.isEmpty())
+            results = getInventory().lookupPart(query);
+            if (results.isEmpty() && !query.isBlank())
                 hasError = true;
-            else
-                partsTableView.setItems(parts);
         } finally {
-            if (hasError)
-                partsTableView.setItems(getInventory().getAllParts());
-            searchPartsErrorLabel.setVisible(hasError);
+            if (hasError) {
+                results = getInventory().getAllParts();
+                searchPartsErrorLabel.setVisible(true);
+            }
+            partsTableView.setItems(results);
         }
     }
 
@@ -146,7 +149,10 @@ public class MainFormController extends BaseController {
     private void refreshProducts() {
         String query = searchProductsTextField.getText();
         boolean hasError = false;
+        ObservableList<Product> results = FXCollections.emptyObservableList();
+
         searchProductsErrorLabel.setVisible(false);
+
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int productId = Integer.parseInt(query);
@@ -154,17 +160,17 @@ public class MainFormController extends BaseController {
             if (queryByIdResult == null)
                 hasError = true;
             else
-                productsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
+                results = FXCollections.observableList(List.of(queryByIdResult));
         } catch (NumberFormatException exception) {
-            ObservableList<Product> products = getInventory().lookupProduct(query);
-            if (products.isEmpty())
+            results = getInventory().lookupProduct(query);
+            if (results.isEmpty() && !query.isBlank())
                 hasError = true;
-            else
-                productsTableView.setItems(products);
         } finally {
-            if (hasError)
-                productsTableView.setItems(getInventory().getAllProducts());
-            searchProductsErrorLabel.setVisible(hasError);
+            if (hasError) {
+                results = getInventory().getAllProducts();
+                searchProductsErrorLabel.setVisible(hasError);
+            }
+            productsTableView.setItems(results);
         }
     }
 

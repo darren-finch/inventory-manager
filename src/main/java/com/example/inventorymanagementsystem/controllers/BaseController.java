@@ -2,7 +2,7 @@ package com.example.inventorymanagementsystem.controllers;
 
 import com.example.inventorymanagementsystem.data.Inventory;
 import com.example.inventorymanagementsystem.di.BaseControllerConfig;
-import com.example.inventorymanagementsystem.services.DialogManager;
+import com.example.inventorymanagementsystem.DialogManager;
 import com.example.inventorymanagementsystem.ScreenNavigator;
 
 public abstract class BaseController {

@@ -2,7 +2,6 @@ package com.example.inventorymanagementsystem;
 
 import com.example.inventorymanagementsystem.data.Inventory;
 import com.example.inventorymanagementsystem.di.BaseControllerConfig;
-import com.example.inventorymanagementsystem.services.DialogManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

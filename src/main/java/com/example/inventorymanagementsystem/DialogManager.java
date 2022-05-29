@@ -1,4 +1,4 @@
-package com.example.inventorymanagementsystem.services;
+package com.example.inventorymanagementsystem;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
