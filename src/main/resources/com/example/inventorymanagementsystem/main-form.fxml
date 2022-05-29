@@ -40,7 +40,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
                <children>
-                  <Label fx:id="searchPartsByIdErrorLabel" alignment="TOP_LEFT" text="Cannot find part by that id." textFill="RED" visible="false" />
+                  <Label fx:id="searchPartsErrorLabel" alignment="TOP_LEFT" text="Cannot find part by that id or name." textFill="RED" visible="false" />
                </children>
             </HBox>
             <TableView fx:id="partsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" />
@@ -70,7 +70,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
                <children>
-                  <Label fx:id="searchProductsByIdErrorLabel" alignment="TOP_LEFT" text="Cannot find product by that id." textFill="RED" visible="false" />
+                  <Label fx:id="searchProductsErrorLabel" alignment="TOP_LEFT" text="Cannot find product by that id or name." textFill="RED" visible="false" />
                </children>
             </HBox>
             <TableView fx:id="productsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1" />

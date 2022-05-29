@@ -27,10 +27,10 @@ public class MainFormController extends BaseController {
     private TextField searchProductsTextField;
 
     @FXML
-    private Label searchPartsByIdErrorLabel;
+    private Label searchPartsErrorLabel;
 
     @FXML
-    private Label searchProductsByIdErrorLabel;
+    private Label searchProductsErrorLabel;
 
     @Override
     public void setupUI() {
@@ -95,18 +95,24 @@ public class MainFormController extends BaseController {
 
     private void refreshParts() {
         String query = searchPartsTextField.getText();
-        searchPartsByIdErrorLabel.setVisible(false);
+        searchPartsErrorLabel.setVisible(false);
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int partId = Integer.parseInt(query);
-            List<Part> queryResults = List.of(getInventory().lookupPart(partId));
-            partsTableView.setItems(FXCollections.observableList(queryResults));
-            searchPartsByIdErrorLabel.setVisible(query.isEmpty());
+            Part queryByIdResult = getInventory().lookupPart(partId);
+            if (queryByIdResult == null)
+                throw new RuntimeException();
+
+            partsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
         } catch (NumberFormatException exception) {
             ObservableList<Part> parts = getInventory().lookupPart(query);
+            if (parts.isEmpty())
+                throw new RuntimeException();
+
             partsTableView.setItems(parts);
         } catch (Exception exception) {
             partsTableView.setItems(getInventory().getAllParts());
+            searchPartsErrorLabel.setVisible(true);
         }
     }
 
@@ -137,18 +143,24 @@ public class MainFormController extends BaseController {
 
     private void refreshProducts() {
         String query = searchProductsTextField.getText();
-        searchProductsByIdErrorLabel.setVisible(false);
+        searchProductsErrorLabel.setVisible(false);
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int productId = Integer.parseInt(query);
-            List<Product> queryResults = List.of(getInventory().lookupProduct(productId));
-            productsTableView.setItems(FXCollections.observableList(queryResults));
-            searchProductsByIdErrorLabel.setVisible(queryResults.isEmpty());
+            Product queryByIdResult = getInventory().lookupProduct(productId);
+            if (queryByIdResult == null)
+                throw new RuntimeException();
+
+            productsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
         } catch (NumberFormatException exception) {
             ObservableList<Product> products = getInventory().lookupProduct(query);
+            if (products.isEmpty())
+                throw new RuntimeException();
+
             productsTableView.setItems(products);
         } catch (Exception exception) {
             productsTableView.setItems(getInventory().getAllProducts());
+            searchProductsErrorLabel.setVisible(true);
         }
     }
 

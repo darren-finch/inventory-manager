@@ -43,7 +43,7 @@ public class EditProductFormController extends BaseController {
     private TextField searchPartsTextField;
 
     @FXML
-    private Label searchPartsByIdErrorLabel;
+    private Label searchPartsErrorLabel;
 
     private TextFieldValidator nameValidator;
     private TextFieldValidator priceValidator;
@@ -195,25 +195,29 @@ public class EditProductFormController extends BaseController {
         associatedPartsTableView.setEditable(false);
     }
 
-    public void onTextFieldChanged() {
+    public void revalidateForm() {
         validator.revalidateForm();
     }
 
     public void searchParts() {
         String query = searchPartsTextField.getText();
-        searchPartsByIdErrorLabel.setVisible(false); // error hidden by default
+        searchPartsErrorLabel.setVisible(false); // error hidden by default
 
         // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
             int partId = Integer.parseInt(query);
-            List<Part> queryResults = List.of(getInventory().lookupPart(partId));
-            allPartsTableView.setItems(FXCollections.observableList(queryResults));
-            searchPartsByIdErrorLabel.setVisible(query.isEmpty());
+            Part queryByIdResult = getInventory().lookupPart(partId);
+            if (queryByIdResult != null) {
+                allPartsTableView.setItems(FXCollections.observableList(List.of(queryByIdResult)));
+            } else {
+                throw new RuntimeException();
+            }
         } catch (NumberFormatException exception) {
             ObservableList<Part> parts = getInventory().lookupPart(query);
             allPartsTableView.setItems(parts);
         } catch (Exception exception) {
             allPartsTableView.setItems(getInventory().getAllParts());
+            searchPartsErrorLabel.setVisible(true);
         }
     }
     public void addAssociatedPart() {
