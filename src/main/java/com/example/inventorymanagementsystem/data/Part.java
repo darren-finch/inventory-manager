@@ -5,12 +5,40 @@ package com.example.inventorymanagementsystem.data;
 * @author Darren Finch
 */
 public abstract class Part {
+    /**
+     * The id
+     */
     private int id;
+    /**
+     * The name
+     */
     private String name;
+    /**
+     * The price
+     */
     private double price;
+    /**
+     * The amount of inventory currently available
+     */
     private int stock;
+    /**
+     * The minimum amount of inventory currently available
+     */
     private int min;
-    private int max;    
+    /**
+     * The maximum amount of inventory currently available
+     */
+    private int max;
+
+    /**
+     * Constructs a new part
+     * @param id the id
+     * @param name the name
+     * @param price the price
+     * @param stock the amount of inventory currently available
+     * @param min the minimum amount of inventory currently available
+     * @param max the maximum amount of inventory currently available
+     */
     public Part(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;

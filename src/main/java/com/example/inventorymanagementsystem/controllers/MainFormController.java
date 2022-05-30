@@ -13,9 +13,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.List;
-
+/**
+ * The main screen for the application. Allows the user to add/modify/delete/search parts and products.
+ */
 public class MainFormController extends BaseController {
+    /**
+     * The TableView for parts.
+     */
     @FXML
     public TableView<Part> partsTableView;
     @FXML
@@ -35,11 +39,6 @@ public class MainFormController extends BaseController {
     public void setupUI() {
         setupPartsTableView();
         setupProductsTableView();
-    }
-
-    @Override
-    public void tearDown() {
-
     }
 
     private void setupPartsTableView() {

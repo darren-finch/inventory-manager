@@ -81,11 +81,6 @@ public class EditProductFormController extends BaseController {
         setupAssociatedPartsTableView();
     }
 
-    @Override
-    public void tearDown() {
-
-    }
-
     private void setupTextFields() {
         idTextField.setDisable(true);
         if (presentationProduct.isExistingProduct())

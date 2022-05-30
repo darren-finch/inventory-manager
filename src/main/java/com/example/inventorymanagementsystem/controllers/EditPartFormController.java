@@ -13,7 +13,6 @@ import javafx.scene.control.ToggleGroup;
 
 import java.util.List;
 
-// I fully acknowledge that there are some gross interdependencies in this class and it definitely needs refactoring
 public class EditPartFormController extends BaseController {
     private int index;
 
@@ -56,9 +55,6 @@ public class EditPartFormController extends BaseController {
     private Label companyNameLabel;
 
     @FXML
-    private Label idInvalidLabel;
-
-    @FXML
     private Label nameInvalidLabel;
 
     @FXML
@@ -97,11 +93,6 @@ public class EditPartFormController extends BaseController {
         setupTextFields();
         setupValidation();
         revalidateForm();
-    }
-
-    @Override
-    public void tearDown() {
-
     }
 
     private void setupValidation() {
