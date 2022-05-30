@@ -4,7 +4,6 @@ import com.example.inventorymanagementsystem.data.Part;
 import com.example.inventorymanagementsystem.data.Product;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -52,13 +51,13 @@ public class MainFormController extends BaseController {
         nameColumn.setMinWidth(100);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        TableColumn<Part, Double> priceColumn  = new TableColumn<>("Price / Cost per Unit");
-        priceColumn.setMinWidth(100);
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
         TableColumn<Part, Integer> stockColumn  = new TableColumn<>("Inventory Level");
         stockColumn.setMinWidth(100);
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+
+        TableColumn<Part, Double> priceColumn  = new TableColumn<>("Price / Cost per Unit");
+        priceColumn.setMinWidth(150);
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         partsTableView.setItems(getInventory().getAllParts());
         getInventory().getAllParts().addListener((InvalidationListener) observable -> {
@@ -82,7 +81,7 @@ public class MainFormController extends BaseController {
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
         TableColumn<Product, Double> priceColumn  = new TableColumn<>("Price / Cost per Unit");
-        priceColumn.setMinWidth(100);
+        priceColumn.setMinWidth(150);
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         productsTableView.setItems(getInventory().getAllProducts());
@@ -96,28 +95,30 @@ public class MainFormController extends BaseController {
     private void refreshParts() {
         String query = searchPartsTextField.getText();
         boolean hasError = false;
-        ObservableList<Part> results = FXCollections.emptyObservableList();
-
         searchPartsErrorLabel.setVisible(false);
-
-        // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
-            int partId = Integer.parseInt(query);
-            Part queryByIdResult = getInventory().lookupPart(partId);
-            if (queryByIdResult == null)
+            int id = Integer.parseInt(query);
+            Part result = getInventory().lookupPart(id);
+            if (result == null) {
                 hasError = true;
-            else
-                results = FXCollections.observableList(List.of(queryByIdResult));
-        } catch (NumberFormatException exception) {
-            results = getInventory().lookupPart(query);
-            if (results.isEmpty() && !query.isBlank())
+            }
+            else {
+                partsTableView.scrollTo(result);
+                partsTableView.getSelectionModel().select(result);
+            }
+        } catch (NumberFormatException e) {
+            ObservableList<Part> results = getInventory().lookupPart(query);
+            if (results.isEmpty()) {
                 hasError = true;
+            } else {
+                partsTableView.setItems(results);
+                partsTableView.getSelectionModel().clearSelection();
+            }
         } finally {
             if (hasError) {
-                results = getInventory().getAllParts();
+                partsTableView.setItems(getInventory().getAllParts());
                 searchPartsErrorLabel.setVisible(true);
             }
-            partsTableView.setItems(results);
         }
     }
 
@@ -149,28 +150,30 @@ public class MainFormController extends BaseController {
     private void refreshProducts() {
         String query = searchProductsTextField.getText();
         boolean hasError = false;
-        ObservableList<Product> results = FXCollections.emptyObservableList();
-
         searchProductsErrorLabel.setVisible(false);
-
-        // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
-            int productId = Integer.parseInt(query);
-            Product queryByIdResult = getInventory().lookupProduct(productId);
-            if (queryByIdResult == null)
+            int id = Integer.parseInt(query);
+            Product result = getInventory().lookupProduct(id);
+            if (result == null) {
                 hasError = true;
-            else
-                results = FXCollections.observableList(List.of(queryByIdResult));
-        } catch (NumberFormatException exception) {
-            results = getInventory().lookupProduct(query);
-            if (results.isEmpty() && !query.isBlank())
+            }
+            else {
+                productsTableView.scrollTo(result);
+                productsTableView.getSelectionModel().select(result);
+            }
+        } catch (NumberFormatException e) {
+            ObservableList<Product> results = getInventory().lookupProduct(query);
+            if (results.isEmpty()) {
                 hasError = true;
+            } else {
+                productsTableView.setItems(results);
+                productsTableView.getSelectionModel().clearSelection();
+            }
         } finally {
             if (hasError) {
-                results = getInventory().getAllProducts();
-                searchProductsErrorLabel.setVisible(hasError);
+                productsTableView.setItems(getInventory().getAllProducts());
+                searchProductsErrorLabel.setVisible(true);
             }
-            productsTableView.setItems(results);
         }
     }
 

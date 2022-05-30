@@ -6,7 +6,6 @@ import com.example.inventorymanagementsystem.controllers.validation.TextFieldVal
 import com.example.inventorymanagementsystem.data.Part;
 import com.example.inventorymanagementsystem.data.Product;
 import javafx.beans.InvalidationListener;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -91,6 +90,8 @@ public class EditProductFormController extends BaseController {
         idTextField.setDisable(true);
         if (presentationProduct.isExistingProduct())
             idTextField.setText(presentationProduct.getId());
+        else
+            idTextField.setText("Auto-Gen");
 
         nameTextField.setText(presentationProduct.getName());
         invTextField.setText(presentationProduct.getStock());
@@ -139,15 +140,15 @@ public class EditProductFormController extends BaseController {
 
     private void setupAllPartsTableView() {
         TableColumn<Part, Integer> idColumn = new TableColumn<>("Part ID");
-        idColumn.setMinWidth(100);
+        idColumn.setMinWidth(50);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<Part, String> nameColumn = new TableColumn<>("Part Name");
-        nameColumn.setMinWidth(100);
+        nameColumn.setMinWidth(50);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<Part, Double> priceColumn  = new TableColumn<>("Price / Cost per Unit");
-        priceColumn.setMinWidth(100);
+        priceColumn.setMinWidth(150);
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         TableColumn<Part, Integer> stockColumn  = new TableColumn<>("Inventory Level");
@@ -161,15 +162,15 @@ public class EditProductFormController extends BaseController {
 
     private void setupAssociatedPartsTableView() {
         TableColumn<Part, Integer> idColumn = new TableColumn<>("Part ID");
-        idColumn.setMinWidth(100);
+        idColumn.setMinWidth(50);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<Part, String> nameColumn = new TableColumn<>("Part Name");
-        nameColumn.setMinWidth(100);
+        nameColumn.setMinWidth(50);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<Part, Double> priceColumn  = new TableColumn<>("Price / Cost per Unit");
-        priceColumn.setMinWidth(100);
+        priceColumn.setMinWidth(150);
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         TableColumn<Part, Integer> stockColumn  = new TableColumn<>("Inventory Level");
@@ -191,28 +192,30 @@ public class EditProductFormController extends BaseController {
     public void searchParts() {
         String query = searchPartsTextField.getText();
         boolean hasError = false;
-        ObservableList<Part> results = FXCollections.emptyObservableList();
-
         searchPartsErrorLabel.setVisible(false);
-
-        // Inventory really should handle this logic of whether to search via id or not, but I'm adhering to the UML diagrams
         try {
-            int partId = Integer.parseInt(query);
-            Part queryByIdResult = getInventory().lookupPart(partId);
-            if (queryByIdResult == null)
+            int id = Integer.parseInt(query);
+            Part result = getInventory().lookupPart(id);
+            if (result == null) {
                 hasError = true;
-            else
-                results = FXCollections.observableList(List.of(queryByIdResult));
-        } catch (NumberFormatException exception) {
-            results = getInventory().lookupPart(query);
-            if (results.isEmpty() && !query.isBlank())
+            }
+            else {
+                allPartsTableView.scrollTo(result);
+                allPartsTableView.getSelectionModel().select(result);
+            }
+        } catch (NumberFormatException e) {
+            ObservableList<Part> results = getInventory().lookupPart(query);
+            if (results.isEmpty()) {
                 hasError = true;
+            } else {
+                allPartsTableView.setItems(results);
+                allPartsTableView.getSelectionModel().clearSelection();
+            }
         } finally {
             if (hasError) {
-                results = getInventory().getAllParts();
+                allPartsTableView.setItems(getInventory().getAllParts());
                 searchPartsErrorLabel.setVisible(true);
             }
-            allPartsTableView.setItems(results);
         }
     }
     public void addAssociatedPart() {

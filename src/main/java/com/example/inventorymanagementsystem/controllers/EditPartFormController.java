@@ -163,6 +163,8 @@ public class EditPartFormController extends BaseController {
         idTextField.setDisable(true);
         if (presentationPart.isExistingPart())
             idTextField.setText(presentationPart.getId());
+        else
+            idTextField.setText("Auto-Gen");
 
         nameTextField.setText(presentationPart.getName());
         invTextField.setText(presentationPart.getStock());

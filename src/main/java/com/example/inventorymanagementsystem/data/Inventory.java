@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Inventory {
-    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>(List.of(new InHouse(0, "Wheel", 99.9, 3, 1, 5, 199), new Outsourced(1, "Bike Frame", 159.90, 5, 5, 10, "RAZOR"))));
+    private final ObservableList<Part> allParts = FXCollections.observableList(new LinkedList<>());
     private final ObservableList<Product> allProducts = FXCollections.observableList(new LinkedList<>());
 
     private int nextPartId = 0;
