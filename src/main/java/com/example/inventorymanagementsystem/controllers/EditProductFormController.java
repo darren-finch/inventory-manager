@@ -13,74 +13,156 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.List;
 
+/**
+ * Functions as both the AddProduct form and the ModifyProduct form.
+ * If a null product is passed to this controller, it functions as the AddProduct form.
+ * If an existing product is passed to this controller, it functions as the ModifyProduct form.
+ */
 public class EditProductFormController extends BaseController {
+    /**
+     * The index of this product in the products TableView on the MainForm
+     */
+    private int index;
+
+    /**
+     * A POJO specifically for form data
+     */
+    private PresentationProduct presentationProduct;
+
+    /**
+     * The validator for the name text field
+     */
+    private TextFieldValidator nameValidator;
+    /**
+     * The validator for the inv text field
+     */
+    private TextFieldValidator invValidator;
+    /**
+     * The validator for the price text field
+     */
+    private TextFieldValidator priceValidator;
+    /**
+     * The validator for the min text field
+     */
+    private TextFieldValidator minValidator;
+    /**
+     * The validator for the max text field
+     */
+    private TextFieldValidator maxValidator;
+
+    /**
+     * The validator for the entire form
+     */
+    private FormValidator formValidator;
+
+    /**
+     * The id text field
+     */
     @FXML
     private TextField idTextField;
 
+    /**
+     * The name text field
+     */
     @FXML
     private TextField nameTextField;
 
-    @FXML
-    private TextField priceTextField;
-
+    /**
+     * The inv text field
+     */
     @FXML
     private TextField invTextField;
 
+    /**
+     * The price text field
+     */
+    @FXML
+    private TextField priceTextField;
+
+    /**
+     * The min text field
+     */
     @FXML
     private TextField minTextField;
 
+    /**
+     * The max text field
+     */
     @FXML
     private TextField maxTextField;
 
+    /**
+     * The TableView for all parts
+     */
     @FXML
     private TableView<Part> allPartsTableView;
 
+    /**
+     * The TableView for associated parts
+     */
     @FXML
     private TableView<Part> associatedPartsTableView;
 
+    /**
+     * The search bar for the allPartsTableView
+     */
     @FXML
     private TextField searchPartsTextField;
 
+    /**
+     * The error label for the searchPartsTextField, displays search errors for the allPartsTableView
+     */
     @FXML
     private Label searchPartsErrorLabel;
 
-    private TextFieldValidator nameValidator;
-    private TextFieldValidator priceValidator;
-    private TextFieldValidator invValidator;
-    private TextFieldValidator minValidator;
-    private TextFieldValidator maxValidator;
-
-    private FormValidator validator;
-
-    private int index;
-
-    private PresentationProduct presentationProduct;
-
+    /**
+     * The error label for the name text field
+     */
     @FXML
     private Label nameInvalidLabel;
 
+    /**
+     * The error label for the inv text field
+     */
     @FXML
     private Label invInvalidLabel;
 
+    /**
+     * The error label for the price text field
+     */
     @FXML
     private Label priceInvalidLabel;
 
+    /**
+     * The error label for the min text field
+     */
     @FXML
     private Label minInvalidLabel;
 
+    /**
+     * Sets the arguments for this form.
+     * @param index The index of the product in the products TableView on the MainForm. Pass -1 if adding a new product.
+     * @param product The selected product in the products TableView on the MainForm. Pass null if adding a new product.
+     */
     public void setArgs(int index, Product product) {
         this.index = index;
         this.presentationProduct = new PresentationProduct(product);
     }
 
+    /**
+     * Sets up UI
+     */
     @Override
     public void setupUI() {
         setupTextFields();
-        setupInputValidators();
+        setupFormValidators();
         setupAllPartsTableView();
         setupAssociatedPartsTableView();
     }
 
+    /**
+     * Set up text fields
+     */
     private void setupTextFields() {
         idTextField.setDisable(true);
         if (presentationProduct.isExistingProduct())
@@ -95,7 +177,10 @@ public class EditProductFormController extends BaseController {
         maxTextField.setText(presentationProduct.getMax());
     }
 
-    private void setupInputValidators() {
+    /**
+     * Sets up the form validators
+     */
+    private void setupFormValidators() {
         nameValidator = new TextFieldValidator(nameTextField, (s) -> true, (s) -> !s.isEmpty(), (s) -> presentationProduct.setName(s));
         invValidator = new TextFieldValidator(invTextField, AcceptableInputUtil::isAcceptableInt, (s) -> {
             try {
@@ -129,10 +214,13 @@ public class EditProductFormController extends BaseController {
         invValidator.setErrorLabel(invInvalidLabel, "Inv must be a valid integer between min and max (inclusive)");
         minValidator.setErrorLabel(minInvalidLabel, "Min must be a valid integer less than or equal to max");
 
-        validator = new FormValidator(List.of(nameValidator, invValidator, priceValidator, minValidator, maxValidator));
-        validator.revalidateForm();
+        formValidator = new FormValidator(List.of(nameValidator, invValidator, priceValidator, minValidator, maxValidator));
+        formValidator.revalidateForm();
     }
 
+    /**
+     * Sets up the allPartsTableView
+     */
     private void setupAllPartsTableView() {
         TableColumn<Part, Integer> idColumn = new TableColumn<>("Part ID");
         idColumn.setMinWidth(50);
@@ -155,6 +243,9 @@ public class EditProductFormController extends BaseController {
         allPartsTableView.setEditable(false);
     }
 
+    /**
+     * Sets up the associatedPartsTableView
+     */
     private void setupAssociatedPartsTableView() {
         TableColumn<Part, Integer> idColumn = new TableColumn<>("Part ID");
         idColumn.setMinWidth(50);
@@ -180,10 +271,16 @@ public class EditProductFormController extends BaseController {
         associatedPartsTableView.setEditable(false);
     }
 
+    /**
+     * Revalidates the form
+     */
     public void revalidateForm() {
-        validator.revalidateForm();
+        formValidator.revalidateForm();
     }
 
+    /**
+     * Search for parts in the allPartsTableView using the query in the searchPartsTextField
+     */
     public void searchParts() {
         String query = searchPartsTextField.getText();
         boolean hasError = false;
@@ -200,7 +297,7 @@ public class EditProductFormController extends BaseController {
             }
         } catch (NumberFormatException e) {
             ObservableList<Part> results = getInventory().lookupPart(query);
-            if (results.isEmpty()) {
+            if (results.isEmpty() && !query.isBlank()) {
                 hasError = true;
             } else {
                 allPartsTableView.setItems(results);
@@ -213,6 +310,10 @@ public class EditProductFormController extends BaseController {
             }
         }
     }
+
+    /**
+     * Adds the selected part in the allPartsTableView to the product (and the associatedPartsTableView)
+     */
     public void addAssociatedPart() {
         SelectionModel<Part> selectionModel = allPartsTableView.getSelectionModel();
         Part selectedPart = selectionModel.getSelectedItem();
@@ -220,6 +321,10 @@ public class EditProductFormController extends BaseController {
             presentationProduct.addAssociatedPart(selectedPart);
         }
     }
+
+    /**
+     * Removes the selected part in the associatedPartsTableView from the product
+     */
     public void removeAssociatedPart() {
         SelectionModel<Part> selectionModel = associatedPartsTableView.getSelectionModel();
         Part selectedPart = selectionModel.getSelectedItem();
@@ -229,13 +334,12 @@ public class EditProductFormController extends BaseController {
             }, null);
         }
     }
-    public void cancel() {
-        getDialogManager().showCancelConfirmationDialog(() -> {
-            getScreenNavigator().switchToMainForm();
-        }, null);
-    }
-    public void saveProduct() {
-        if (!validator.formIsValid()) {
+
+    /**
+     * If the form data is valid, saves the product to inventory
+     */
+    public void onSave() {
+        if (!formValidator.formIsValid()) {
             return;
         }
 
@@ -246,5 +350,14 @@ public class EditProductFormController extends BaseController {
         }
 
         getScreenNavigator().switchToMainForm();
+    }
+
+    /**
+     * Switches back to the MainForm without saving anything upon confirmation via a confirmation dialog
+     */
+    public void onCancel() {
+        getDialogManager().showCancelConfirmationDialog(() -> {
+            getScreenNavigator().switchToMainForm();
+        }, null);
     }
 }

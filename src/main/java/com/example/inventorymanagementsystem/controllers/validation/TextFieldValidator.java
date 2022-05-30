@@ -9,16 +9,62 @@ import javafx.scene.control.TextField;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * A real-time validator for TextFields.
+ * It allows the user to specify two rules for validation:
+ *
+ * 1. Acceptable Input Rule
+ * (Returns true if the next character can change the current text, else false)
+ * For example, letters aren't allowed in a numeric TextField. That would go into the Acceptable Input Rule
+ * This validator will ensure the user cannot input an unacceptable character.
+ *
+ * 2. Valid Input Rule
+ * (Returns true if the current input is valid according to business rules, else false)
+ * For example, a minimum needs to be less than a maximum.
+ */
 public class TextFieldValidator implements ChangeListener<String> {
-    private String text;
-    private final TextField textField;
-    private Label errorLabel;
-    private final Function<String, Boolean> acceptInputRule;
-    private final Function<String, Boolean> validInputRule;
-    private final Consumer<String> onTextChangedExternal;
-    private boolean isValid;
+    /**
+     * The current text for the text field. This is guaranteed to be acceptable input, but not necessarily valid input.
+     */
+    private String text = "";
 
+    /**
+     * The TextField this validator will monitor
+     */
+    private final TextField textField;
+
+    /**
+     * An error label to display when the input is acceptable but not
+     */
+    private Label invalidInputErrorLabel;
+
+    /**
+     * The acceptable input rule
+     */
+    private final Function<String, Boolean> acceptInputRule;
+
+    /**
+     * The valid input rule
+     */
+    private final Function<String, Boolean> validInputRule;
+
+    /**
+     * A Consumer that can run when the text has changed.
+     */
+    private final Consumer<String> onTextChangedExternal;
+
+    /**
+     * Constructs a new TextFieldValidator
+     * @param textField The TextField to monitor
+     * @param acceptInputRule The Acceptable Input Rule
+     * @param validInputRule The Valid Input Rule
+     * @param onTextChanged A Consumer that runs when a new acceptable input is entered
+     */
     public TextFieldValidator(TextField textField, Function<String, Boolean> acceptInputRule, Function<String, Boolean> validInputRule, Consumer<String> onTextChanged) {
+        if (textField == null || acceptInputRule == null || validInputRule == null || onTextChanged == null) {
+            throw new RuntimeException("TextFieldValidator: Null arguments in constructor");
+        }
+
         this.textField = textField;
         this.acceptInputRule = acceptInputRule;
         this.validInputRule = validInputRule;
@@ -28,28 +74,41 @@ public class TextFieldValidator implements ChangeListener<String> {
         determineValidityOfInitialState();
     }
 
+    /**
+     * Determines whether the initial state of this validator is valid
+     */
     private void determineValidityOfInitialState() {
         onTextChangedInternal(false);
     }
 
+    /**
+     * Sets an error label to be displayed when the current input is invalid
+     * @param errorLabel The label to be displayed
+     * @param errorMessage The error message to display on the label
+     */
     public void setErrorLabel(Label errorLabel, String errorMessage) {
-        this.errorLabel = errorLabel;
-        this.errorLabel.setText(errorMessage);
+        this.invalidInputErrorLabel = errorLabel;
+        this.invalidInputErrorLabel.setText(errorMessage);
     }
 
-    // Returns the current, valid text according to the validation rules
+    /**
+     * @return The current, acceptable text according to the validation rules
+     */
     public String getText() {
         return text;
     }
 
-    public void setText(String newText) {
-        textField.setText(newText);
-    }
-
+    /**
+     * @return Whether the current input is valid
+     */
     public boolean isValid() {
-        return isValid;
+        return validInputRule.apply(text);
     }
 
+    /**
+     * Called when the validator is initialized and called when the text field changes
+     * @param triggerOnTextChangedExternal Whether this text field change should trigger onTextChangedExternal
+     */
     private void onTextChangedInternal(boolean triggerOnTextChangedExternal) {
         if (acceptInputRule.apply(textField.getText())) {
             text = textField.getText();
@@ -61,32 +120,48 @@ public class TextFieldValidator implements ChangeListener<String> {
         }
     }
 
+    /**
+     * If the next input will make the current input unacceptable, then this method discards that input
+     */
     private void undoNewTextFieldChange() {
         textField.textProperty().removeListener(this);
         textField.setText(text);
         textField.textProperty().addListener(this);
     }
 
+    /**
+     * Redetermines input validity and updates error labels accordingly
+     */
     public void revalidate() {
         if (validInputRule.apply(text)) {
-            isValid = true;
-            if (errorLabel != null)
-                Util.hideAndRemoveFromDocumentFlow(errorLabel);
+            if (invalidInputErrorLabel != null)
+                Util.hideAndRemoveFromDocumentFlow(invalidInputErrorLabel);
         } else {
-            isValid = false;
-            if (errorLabel != null)
-                Util.showAndAddBackToDocumentFlow(errorLabel);
+            if (invalidInputErrorLabel != null)
+                Util.showAndAddBackToDocumentFlow(invalidInputErrorLabel);
         }
     }
 
+    /**
+     * @return True if the TextField we're monitoring is visible
+     */
     public boolean isVisible() {
         return textField.isVisible();
     }
 
+    /**
+     * @return True if the TextField we're monitoring is enabled
+     */
     public boolean isEnabled() {
         return !textField.isDisabled();
     }
 
+    /**
+     * Called when the text field changes
+     * @param observableValue
+     * @param s
+     * @param t1
+     */
     @Override
     public final void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
         onTextChangedInternal(true);
