@@ -6,11 +6,17 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
+ * FUTURE ENHANCEMENT
+ * Allow updating a part to also update any associated parts that are based on the part you updated.
+ * This would best be done by using a SQL database instead of the in-memory DB we have currently.
+ *
  * The main application
  */
 public class InventoryManagementSystemApplication extends Application {
 
     /**
+     * JAVADOCS LOCATED AT inventory-management-system/docs
+     *
      * The entry point for the application
      * @param args the arguments passed to the application from the command line
      */

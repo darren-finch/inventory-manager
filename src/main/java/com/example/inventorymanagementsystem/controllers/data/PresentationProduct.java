@@ -1,4 +1,4 @@
-package com.example.inventorymanagementsystem.controllers;
+package com.example.inventorymanagementsystem.controllers.data;
 
 import com.example.inventorymanagementsystem.data.Part;
 import com.example.inventorymanagementsystem.data.Product;

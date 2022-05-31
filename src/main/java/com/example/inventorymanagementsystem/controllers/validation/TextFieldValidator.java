@@ -130,6 +130,12 @@ public class TextFieldValidator implements ChangeListener<String> {
     }
 
     /**
+     * RUNTIME ERROR
+     * NullReferenceException when I tried to access invalidInputErrorLabel before it was initialized.
+     * Because the user decides when he wants to set invalidInputErrorLabel, it's not guaranteed for that object
+     * to be available. So I corrected this error by simply checking to see if invalidInputErrorLabel is null before
+     * using it.
+     *
      * Redetermines input validity and updates error labels accordingly
      */
     public void revalidate() {

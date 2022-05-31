@@ -1,5 +1,6 @@
 package com.example.inventorymanagementsystem.controllers;
 
+import com.example.inventorymanagementsystem.controllers.data.PresentationProduct;
 import com.example.inventorymanagementsystem.controllers.validation.AcceptableInputUtil;
 import com.example.inventorymanagementsystem.controllers.validation.FormValidator;
 import com.example.inventorymanagementsystem.controllers.validation.TextFieldValidator;

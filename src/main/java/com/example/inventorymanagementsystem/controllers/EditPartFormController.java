@@ -1,6 +1,7 @@
 package com.example.inventorymanagementsystem.controllers;
 
 import com.example.inventorymanagementsystem.Util;
+import com.example.inventorymanagementsystem.controllers.data.PresentationPart;
 import com.example.inventorymanagementsystem.controllers.validation.AcceptableInputUtil;
 import com.example.inventorymanagementsystem.controllers.validation.FormValidator;
 import com.example.inventorymanagementsystem.controllers.validation.TextFieldValidator;
@@ -223,7 +224,7 @@ public class EditPartFormController extends BaseController {
                     }
                 }, (s) -> presentationPart.setMin(s));
         maxValidator = new TextFieldValidator(maxTextField, AcceptableInputUtil::isAcceptableInt, (s) -> true, (s) -> presentationPart.setMax(s));
-        machineIdValidator = new TextFieldValidator(machineIdTextField, AcceptableInputUtil::isAcceptableInt, (s) -> true, (s) -> presentationPart.setMachineId(s));
+        machineIdValidator = new TextFieldValidator(machineIdTextField, AcceptableInputUtil::isAcceptableInt, (s) -> !s.isBlank(), (s) -> presentationPart.setMachineId(s));
         companyNameValidator = new TextFieldValidator(companyNameTextField, (s) -> true, (s) -> !s.isBlank(), (s) -> presentationPart.setCompanyName(s));
 
         nameValidator.setErrorLabel(nameInvalidLabel, "Name must be non-empty");
